@@ -1,0 +1,70 @@
+﻿@model Account
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="d-flex justify-content-between">
+    <div><h1>Hi, @Model.firstName !</h1></div>
+    <div class="text-end"><a asp-action="Index" asp-controller="ChangePassword"><button type="button" class="btn btn-primary">Change Password</button></a></div>
+</div>
+
+<hr />
+<h1>Personal Details</h1>
+<div class="row">
+    <div class="col-6 flex-column">
+        <div>Name : @Model.firstName @Model.lastName</div>
+        <div>
+            @if (@Model.phoneNo != null)
+            {
+                <div>Phone Number: @Model.phoneNo</div>
+            }
+        </div>
+    </div>
+    <div class="col-6 flex-column text-end">
+        <div>Email : @Model.email</div>
+        <div>
+            @if (@Model.address!= null)
+            {
+                <div>Address: @Model.address.houseNo, @Model.address.street, @Model.address.city, @Model.address.state, @Model.address.country</div>
+            }
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <a asp-controller="PersonalDetail" asp-action="edit" asp-route-email="@Model.email"><button type="button" class="btn btn-primary">Edit</button></a>
+    </div>
+    
+</div>
+<hr />
+<h1>Profiles</h1>
+<div class="d-flex justify-content-center">
+    <a asp-controller="Profiles" asp-action="add" asp-route-email="@Model.email"><button type="button" class="btn btn-primary">Add Profile</button></a>
+</div>
+@if (@Model.profiles != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Platform</th>
+                <th scope="col">Link</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var url in @Model.profiles)
+            {
+                <tr>
+                    <th scope="row">@url.name</th>
+                    <td>@url.url</td>
+                    <td><a asp-action="edit" asp-controller="Profiles" asp-route-Id="@url.Id"><button type="button" class="btn btn-primary">Edit</button></a></td>
+                    <td><a asp-action="delete" asp-controller="Profiles" asp-route-Id="@url.Id"><button type="button" class="btn btn-danger">Delete</button></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
